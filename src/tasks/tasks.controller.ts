@@ -1,3 +1,4 @@
+import { CreateTaskDto } from './../dto/create-task.dto';
 import { TasksService } from './tasks.service';
 import { Controller, Get, Post, Body } from '@nestjs/common';
 import { Task } from './task.module';
@@ -16,11 +17,10 @@ export class TasksController {
     @Post()
     createNewTask(
         // The Body will only accept a title and a description parameter
-        @Body('title') title:string,
-        @Body('description') description:string,
+        @Body() CreateTaskDto: CreateTaskDto
     ):Task {
         // Retrieve title and description
         // console.log({title, description})
-        return this.tasksService.createNewTask(title, description)
+        return this.tasksService.createNewTask(CreateTaskDto)
     }
 }
