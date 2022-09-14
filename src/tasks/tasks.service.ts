@@ -1,3 +1,4 @@
+import { UpdateTaskStatusDto } from './../dto/update-task-status.dto';
 import { CreateTaskDto } from './../dto/create-task.dto';
 import { Injectable } from '@nestjs/common';
 import { v4 as uuid } from 'uuid';
@@ -35,4 +36,13 @@ export class TasksService {
         // Return the task to our controller
         return task
     }
+
+    // Delete a task by Id\
+    deleteTaskById(id: string): void{
+        this.tasks = this.tasks.filter(task => task.id !== id)
+    }
+
+    // updateTaskStatus(id, UpdateTaskStatusDto:UpdateTaskStatusDto): Task{
+    //     const {status} = UpdateTaskStatusDto
+    // }
 }
