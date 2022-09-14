@@ -1,6 +1,7 @@
+import { GetTaskFilterDto } from './../dto/get-task-filter';
 import { CreateTaskDto } from './../dto/create-task.dto';
 import { TasksService } from './tasks.service';
-import { Controller, Get, Post, Body, Param, Delete, HttpCode, Patch } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, HttpCode, Patch, Query } from '@nestjs/common';
 import { Task } from './task.module';
 import { UpdateTaskStatusDto } from 'src/dto/update-task-status.dto';
 
@@ -12,8 +13,15 @@ export class TasksController {
     // http://localhost:3000/tasks
     // Retrieve the tasks that was exposed by the TaskService
     @Get()
-    getAllTasks(): Task[]{
-        return this.tasksService.getAllTasks()
+    getTasks(@Query() filterDTO: GetTaskFilterDto): Task[]{
+        // If any query was provided forr filtering then call getTaskByFilter
+        // If filterDTO has a value then run if statement
+        if(Object.keys(filterDTO).length){
+            // Run function
+            return this.tasksService.getTaskWithFilters(filterDTO)
+        }else{
+            return this.tasksService.getAllTasks()
+        }
     }
 
     // http://localhost:3000/tasks/<someId>
@@ -38,9 +46,9 @@ export class TasksController {
         return this.tasksService.deleteTaskById(id)
     }
 
-    // @Patch('/:id')
-    // updateTaskStatus(@Param('id') id: string, @Body() body: UpdateTaskStatusDto){
-    //     console.log('body: ', body);
-    //     return this.tasksService.updateTaskStatus(id,body)
-    // }
+    @Patch('/:id/status')
+    updateTaskStatus(@Param('id') id: string, @Body('status') status: UpdateTaskStatusDto){
+        console.log('body: ', status);
+        return this.tasksService.updateTaskStatus(id,status)
+    }
 }
